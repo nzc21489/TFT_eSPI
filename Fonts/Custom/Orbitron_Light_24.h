@@ -1,6 +1,6 @@
 // Created by http://oleddisplay.squix.ch/ Consider a donation
 // In case of problems make sure that you are using the font file with the correct version!
-const uint8_t Orbitron_Light_24Bitmaps[] PROGMEM = {
+const uint8_t Orbitron_Light_24Bitmaps[]  = {
 
 	// Bitmap Data:
 	0x00, // ' '
@@ -98,7 +98,7 @@ const uint8_t Orbitron_Light_24Bitmaps[] PROGMEM = {
 	0xFF,0xFF,0xFF,0xFF,0xFF,0xFC, // '|'
 	0xE7,0x8C,0x63,0x18,0xC3,0x08,0xCC,0x63,0x18,0xDE,0xE0 // '}'
 };
-const GFXglyph Orbitron_Light_24Glyphs[] PROGMEM = {
+const GFXglyph Orbitron_Light_24Glyphs[]  = {
 // bitmapOffset, width, height, xAdvance, xOffset, yOffset
 	  {     0,   1,   1,   8,    0,    0 }, // ' '
 	  {     1,   2,  17,   6,    1,  -17 }, // '!'
@@ -195,5 +195,5 @@ const GFXglyph Orbitron_Light_24Glyphs[] PROGMEM = {
 	  {  2515,   2,  23,   6,    1,  -20 }, // '|'
 	  {  2521,   5,  17,   8,    1,  -17 } // '}'
 };
-const GFXfont Orbitron_Light_24 PROGMEM = {
+const GFXfont Orbitron_Light_24  = {
 (uint8_t  *)Orbitron_Light_24Bitmaps,(GFXglyph *)Orbitron_Light_24Glyphs,0x20, 0x7D, 24};

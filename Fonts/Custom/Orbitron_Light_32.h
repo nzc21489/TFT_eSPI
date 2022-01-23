@@ -1,6 +1,6 @@
 // Created by http://oleddisplay.squix.ch/ Consider a donation
 // In case of problems make sure that you are using the font file with the correct version!
-const uint8_t Orbitron_Light_32Bitmaps[] PROGMEM = {
+const uint8_t Orbitron_Light_32Bitmaps[]  = {
 
 	// Bitmap Data:
 	0x00, // ' '
@@ -98,7 +98,7 @@ const uint8_t Orbitron_Light_32Bitmaps[] PROGMEM = {
 	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xF8, // '|'
 	0xE3,0xC3,0x8E,0x38,0xE3,0x8E,0x38,0xE1,0xC3,0x0C,0x73,0x8E,0x38,0xE3,0x8E,0x38,0xEF,0x38 // '}'
 };
-const GFXglyph Orbitron_Light_32Glyphs[] PROGMEM = {
+const GFXglyph Orbitron_Light_32Glyphs[]  = {
 // bitmapOffset, width, height, xAdvance, xOffset, yOffset
 	  {     0,   1,   1,  10,    0,    0 }, // ' '
 	  {     1,   3,  24,   9,    2,  -24 }, // '!'
@@ -195,5 +195,5 @@ const GFXglyph Orbitron_Light_32Glyphs[] PROGMEM = {
 	  {  4584,   3,  31,   8,    2,  -27 }, // '|'
 	  {  4596,   6,  24,  10,    2,  -24 } // '}'
 };
-const GFXfont Orbitron_Light_32 PROGMEM = {
+const GFXfont Orbitron_Light_32  = {
 (uint8_t  *)Orbitron_Light_32Bitmaps,(GFXglyph *)Orbitron_Light_32Glyphs,0x20, 0x7D, 32};

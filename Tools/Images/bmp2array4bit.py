@@ -192,7 +192,7 @@ for i in range(colorsUsed[0]):
 outputString = outputString[:-2]
 outputString += "\n};\n\n"
 outputString += "// width is " + str(width) + ", height is " + str(height) + "\n"
-outputString += "static const uint8_t myGraphic[" + str(arraySize) + "] PROGMEM = {" + '\n'
+outputString += "static const uint8_t myGraphic[" + str(arraySize) + "]  = {" + '\n'
 
 if bitsPerPixel != 4:
     print("Expected 4 bits per pixel; found {}".format(bitsPerPixel))

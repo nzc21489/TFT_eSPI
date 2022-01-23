@@ -27,7 +27,7 @@
 ***************************************************************************************/
 
 //Standard support
-#include <Arduino.h>
+// #include <Arduino.h>
 #include <Print.h>
 #include <SPI.h>
 
@@ -38,7 +38,7 @@
 // available and the pins to be used, etc, etc
 #include <User_Setup_Select.h>
 
-// Handle FLASH based storage e.g. PROGMEM
+// Handle FLASH based storage e.g. 
 #if defined(ARDUINO_ARCH_RP2040)
   #undef pgm_read_byte
   #define pgm_read_byte(addr)   (*(const unsigned char *)(addr))
@@ -57,7 +57,7 @@
 #elif defined(ESP8266) || defined(ESP32)
   #include <pgmspace.h>
 #else
-  #define PROGMEM
+  #define 
 #endif
 
 // Include the processor specific drivers
@@ -169,8 +169,8 @@
 
 // Create a null default font in case some fonts not used (to prevent crash)
 const  uint8_t widtbl_null[1] = {0};
-PROGMEM const uint8_t chr_null[1] = {0};
-PROGMEM const uint8_t* const chrtbl_null[1] = {chr_null};
+ const uint8_t chr_null[1] = {0};
+ const uint8_t* const chrtbl_null[1] = {chr_null};
 
 // This is a structure to conveniently hold information on the default fonts
 // Stores pointer to font character image address table, width table and height
@@ -182,7 +182,7 @@ typedef struct {
     } fontinfo;
 
 // Now fill the structure
-const PROGMEM fontinfo fontdata [] = {
+const  fontinfo fontdata [] = {
   #ifdef LOAD_GLCD
    { (const uint8_t *)font, widtbl_null, 0, 0 },
   #else
@@ -283,7 +283,7 @@ const PROGMEM fontinfo fontdata [] = {
 #define TFT_TRANSPARENT 0x0120 // This is actually a dark green
 
 // Default palette for 4 bit colour sprites
-static const uint16_t default_4bit_palette[] PROGMEM = {
+static const uint16_t default_4bit_palette[]  = {
   TFT_BLACK,    //  0  ^
   TFT_BROWN,    //  1  |
   TFT_RED,      //  2  |
@@ -379,7 +379,7 @@ swap_coord(T& a, T& b) { T t = a; a = b; b = t; }
 typedef uint16_t (*getColorCallback)(uint16_t x, uint16_t y);
 
 // Class functions and variables
-class TFT_eSPI : public Print { friend class TFT_eSprite; // Sprite class has access to protected members
+class TFT_eSPI : public Print_ { friend class TFT_eSprite; // Sprite class has access to protected members
 
  //--------------------------------------- public ------------------------------------//
  public:
@@ -494,7 +494,7 @@ class TFT_eSPI : public Print { friend class TFT_eSprite; // Sprite class has ac
   void     pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *data);
   void     pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *data, uint16_t transparent);
 
-           // These are used to render images stored in FLASH (PROGMEM)
+           // These are used to render images stored in FLASH ()
   void     pushImage(int32_t x, int32_t y, int32_t w, int32_t h, const uint16_t *data, uint16_t transparent);
   void     pushImage(int32_t x, int32_t y, int32_t w, int32_t h, const uint16_t *data);
 

@@ -1,3 +1,11 @@
+TFT_eSPI library for pico-sdk
+
+original : https://github.com/Bodmer/TFT_eSPI
+
+original readme ↓
+
+---
+
 A [Beta test branch](https://github.com/Bodmer/TFT_eSPI/tree/2.4.0-Beta) has been created, this has some new anti-aliased line functions (drawSpot, drawWideLine and drawWedgeLine), see the new Anti-aliased_Clock_v3 example. Comments in discussions tab (not issues at the moment please) are welcome.
 
 A new ["Discussions"](https://github.com/Bodmer/TFT_eSPI/discussions) facility has been added for Q&A etc. Use the ["Issues"](https://github.com/Bodmer/TFT_eSPI/issues) tab only for problems with the library. Thanks!

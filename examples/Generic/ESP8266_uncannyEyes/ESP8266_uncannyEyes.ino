@@ -17,7 +17,7 @@
 // which is quite reasonable. Operation at an 80MHz SPI clock is possible but
 // the display may not be able to cope with a clock rate that high and the
 // performance improvement is small. Operate the ESP8266 at 160MHz for best
-// frame rate. Note the images are stored in SPI FLASH (PROGMEM) so performance
+// frame rate. Note the images are stored in SPI FLASH () so performance
 // will be constrained by the increased memory access time.
 
 // Original header for this sketch is below. Note: the technical aspects of the

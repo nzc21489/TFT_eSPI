@@ -239,7 +239,7 @@ void TFT_eSPI::loadMetrics(void)
     bitmapPtr += gWidth[gNum] * gHeight[gNum];
 
     gNum++;
-    yield();
+    // yield();
   }
 
   gFont.yAdvance = gFont.maxAscent + gFont.maxDescent;
@@ -502,7 +502,7 @@ void TFT_eSPI::showFont(uint32_t td)
       if (cursorY + gFont.maxAscent + gFont.descent >= height()) {
         cursorX = -gdX[i];
         cursorY = 0;
-        delay(timeDelay);
+        sleep_ms(timeDelay);
         timeDelay = td;
         fillScreen(textbgcolor);
       }
@@ -515,7 +515,7 @@ void TFT_eSPI::showFont(uint32_t td)
     yield();
   }
 
-  delay(timeDelay);
+  sleep_ms(timeDelay);
   fillScreen(textbgcolor);
   //fontFile.close();
 

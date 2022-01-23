@@ -122,7 +122,7 @@
 
 #ifdef TFT_BL
   // Turn on the back-light LED
-  digitalWrite(TFT_BL, HIGH);
-  pinMode(TFT_BL, OUTPUT);
+  gpio_put(TFT_BL, HIGH);
+  gpio_set_dir(TFT_BL, GPIO_OUT);
 #endif
 }

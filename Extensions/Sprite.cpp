@@ -1167,7 +1167,7 @@ void  TFT_eSprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_
 
 /***************************************************************************************
 ** Function name:           pushImage
-** Description:             push 565 colour FLASH (PROGMEM) image into a defined area
+** Description:             push 565 colour FLASH () image into a defined area
 ***************************************************************************************/
 void  TFT_eSprite::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, const uint16_t *data)
 {

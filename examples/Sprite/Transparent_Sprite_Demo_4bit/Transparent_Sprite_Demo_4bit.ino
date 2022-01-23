@@ -29,7 +29,7 @@
 // at line 32, then edit line 77 to match new name.
 // To setup you own palette edit the next line to //*
   /*
-  static const uint16_t default_4bit_palette[] PROGMEM = {
+  static const uint16_t default_4bit_palette[]  = {
     TFT_BLACK,    //  0  ^
     TFT_BROWN,    //  1  |
     TFT_RED,      //  2  |

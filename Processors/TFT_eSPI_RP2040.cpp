@@ -5,7 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // Global variables
 ////////////////////////////////////////////////////////////////////////////////////////
-
+#include "SPI.h"
+#include "User_Setup.h"
+#include "TFT_eSPI.h"
 #if !defined (TFT_PARALLEL_8_BIT)
   // Select the SPI port and board package to use
   #ifdef ARDUINO_ARCH_MBED
@@ -394,7 +396,7 @@ bool TFT_eSPI::initDMA(bool ctrl_cs)
   dma_tx_config = dma_channel_get_default_config(dma_tx_channel);
   
   channel_config_set_transfer_data_size(&dma_tx_config, DMA_SIZE_16);
-  channel_config_set_dreq(&dma_tx_config, spi_get_index(spi0) ? DREQ_SPI1_TX : DREQ_SPI0_TX);
+  channel_config_set_dreq(&dma_tx_config, spi_get_index(spi0) ? DREQ_SPI0_TX : DREQ_SPI0_TX);
 
   DMA_Enabled = true;
   return true;

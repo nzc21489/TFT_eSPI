@@ -13,8 +13,12 @@
   Last update by Bodmer 20/03/20
  ****************************************************/
 
-
 #include "TFT_eSPI.h"
+#include <math.h>
+#include "pico/stdlib.h"
+
+#define HIGH 1
+#define LOW 0
 
 #if defined (ESP32)
   #include "Processors/TFT_eSPI_ESP32.c"
@@ -23,7 +27,7 @@
 #elif defined (STM32) // (_VARIANT_ARDUINO_STM32_) stm32_def.h
   #include "Processors/TFT_eSPI_STM32.c"
 #elif defined (ARDUINO_ARCH_RP2040) // Raspberry Pi Pico
-  #include "Processors/TFT_eSPI_RP2040.c"
+  #include "Processors/TFT_eSPI_RP2040.cpp"
 #else
   #include "Processors/TFT_eSPI_Generic.c"
 #endif
@@ -348,7 +352,7 @@ inline void TFT_eSPI::end_tft_read(void){
 
 // The ST7796 appears to need a 4ms delay after a CGRAM read, otherwise subsequent writes will fail!
 #ifdef ST7796_DRIVER
-  delay(4);
+  sleep_ms(4);
 #endif
 }
 
@@ -372,48 +376,50 @@ TFT_eSPI::TFT_eSPI(int16_t w, int16_t h)
 // might call and initialise other SPI peripherals which would could cause conflicts
 // if CS is floating or undefined.
 #ifdef TFT_CS
-  pinMode(TFT_CS, OUTPUT);
-  digitalWrite(TFT_CS, HIGH); // Chip select high (inactive)
+  gpio_init(TFT_CS);
+  gpio_set_dir(TFT_CS, GPIO_OUT);
+  gpio_put(TFT_CS, HIGH); // Chip select high (inactive)
 #endif
 
 // Configure chip select for touchscreen controller if present
 #ifdef TOUCH_CS
-  pinMode(TOUCH_CS, OUTPUT);
-  digitalWrite(TOUCH_CS, HIGH); // Chip select high (inactive)
+  gpio_set_dir(TOUCH_CS, GPIO_OUT);
+  gpio_put(TOUCH_CS, HIGH); // Chip select high (inactive)
 #endif
 
 #ifdef TFT_WR
-  pinMode(TFT_WR, OUTPUT);
-  digitalWrite(TFT_WR, HIGH); // Set write strobe high (inactive)
+  gpio_set_dir(TFT_WR, GPIO_OUT);
+  gpio_put(TFT_WR, HIGH); // Set write strobe high (inactive)
 #endif
 
 #ifdef TFT_DC
-  pinMode(TFT_DC, OUTPUT);
-  digitalWrite(TFT_DC, HIGH); // Data/Command high = data mode
+  gpio_init(TFT_DC);
+  gpio_set_dir(TFT_DC, GPIO_OUT);
+  gpio_put(TFT_DC, HIGH); // Data/Command high = data mode
 #endif
 
 #ifdef TFT_RST
   if (TFT_RST >= 0) {
-    pinMode(TFT_RST, OUTPUT);
-    digitalWrite(TFT_RST, HIGH); // Set high, do not share pin with another SPI device
+    gpio_set_dir(TFT_RST, GPIO_OUT);
+    gpio_put(TFT_RST, HIGH); // Set high, do not share pin with another SPI device
   }
 #endif
 
 #if defined (TFT_PARALLEL_8_BIT)
 
-  // Make sure read is high before we set the bus to output
-  pinMode(TFT_RD, OUTPUT);
-  digitalWrite(TFT_RD, HIGH);
+  // Make sure read is high before we set the bus to GPIO_OUT
+  gpio_set_dir(TFT_RD, GPIO_OUT);
+  gpio_put(TFT_RD, HIGH);
 
   // Set TFT data bus lines to output
-  pinMode(TFT_D0, OUTPUT); digitalWrite(TFT_D0, HIGH);
-  pinMode(TFT_D1, OUTPUT); digitalWrite(TFT_D1, HIGH);
-  pinMode(TFT_D2, OUTPUT); digitalWrite(TFT_D2, HIGH);
-  pinMode(TFT_D3, OUTPUT); digitalWrite(TFT_D3, HIGH);
-  pinMode(TFT_D4, OUTPUT); digitalWrite(TFT_D4, HIGH);
-  pinMode(TFT_D5, OUTPUT); digitalWrite(TFT_D5, HIGH);
-  pinMode(TFT_D6, OUTPUT); digitalWrite(TFT_D6, HIGH);
-  pinMode(TFT_D7, OUTPUT); digitalWrite(TFT_D7, HIGH);
+  gpio_set_dir(TFT_D0, GPIO_OUT); gpio_put(TFT_D0, HIGH);
+  gpio_set_dir(TFT_D1, GPIO_OUT); gpio_put(TFT_D1, HIGH);
+  gpio_set_dir(TFT_D2, GPIO_OUT); gpio_put(TFT_D2, HIGH);
+  gpio_set_dir(TFT_D3, GPIO_OUT); gpio_put(TFT_D3, HIGH);
+  gpio_set_dir(TFT_D4, GPIO_OUT); gpio_put(TFT_D4, HIGH);
+  gpio_set_dir(TFT_D5, GPIO_OUT); gpio_put(TFT_D5, HIGH);
+  gpio_set_dir(TFT_D6, GPIO_OUT); gpio_put(TFT_D6, HIGH);
+  gpio_set_dir(TFT_D7, GPIO_OUT); gpio_put(TFT_D7, HIGH);
 
   CONSTRUCTOR_INIT_TFT_DATA_BUS;
 
@@ -569,8 +575,9 @@ void TFT_eSPI::init(uint8_t tc)
 
 #ifdef TFT_CS
   // Set to output once again in case ESP8266 D6 (MISO) is used for CS
-  pinMode(TFT_CS, OUTPUT);
-  digitalWrite(TFT_CS, HIGH); // Chip select high (inactive)
+  gpio_init(TFT_CS);
+  gpio_set_dir(TFT_CS, GPIO_OUT);
+  gpio_put(TFT_CS, HIGH); // Chip select high (inactive)
 #elif defined (ESP8266) && !defined (TFT_PARALLEL_8_BIT)
   spi.setHwCs(1); // Use hardware SS toggling
 #endif
@@ -579,8 +586,9 @@ void TFT_eSPI::init(uint8_t tc)
 
   // Set to output once again in case ESP8266 D6 (MISO) is used for DC
 #ifdef TFT_DC
-    pinMode(TFT_DC, OUTPUT);
-    digitalWrite(TFT_DC, HIGH); // Data/Command high = data mode
+    gpio_init(TFT_DC);
+    gpio_set_dir(TFT_DC, GPIO_OUT);
+    gpio_put(TFT_DC, HIGH); // Data/Command high = data mode
 #endif
 
     _booted = false;
@@ -590,18 +598,18 @@ void TFT_eSPI::init(uint8_t tc)
   // Toggle RST low to reset
 #ifdef TFT_RST
   if (TFT_RST >= 0) {
-    digitalWrite(TFT_RST, HIGH);
-    delay(5);
-    digitalWrite(TFT_RST, LOW);
-    delay(20);
-    digitalWrite(TFT_RST, HIGH);
+    gpio_put(TFT_RST, HIGH);
+    sleep_ms(5);
+    gpio_put(TFT_RST, LOW);
+    sleep_ms(20);
+    gpio_put(TFT_RST, HIGH);
   }
   else writecommand(TFT_SWRST); // Software reset
 #else
   writecommand(TFT_SWRST); // Software reset
 #endif
 
-  delay(150); // Wait for reset to complete
+  sleep_ms(150); // Wait for reset to complete
 
   begin_tft_write();
 
@@ -675,13 +683,13 @@ void TFT_eSPI::init(uint8_t tc)
   setRotation(rotation);
 
 #if defined (TFT_BL) && defined (TFT_BACKLIGHT_ON)
-  pinMode(TFT_BL, OUTPUT);
-  digitalWrite(TFT_BL, TFT_BACKLIGHT_ON);
+  gpio_set_dir(TFT_BL, GPIO_OUT);
+  gpio_put(TFT_BL, TFT_BACKLIGHT_ON);
 #else
   #if defined (TFT_BL) && defined (M5STACK)
     // Turn on the back-light LED
-    pinMode(TFT_BL, OUTPUT);
-    digitalWrite(TFT_BL, HIGH);
+    gpio_set_dir(TFT_BL, GPIO_OUT);
+    gpio_put(TFT_BL, HIGH);
   #endif
 #endif
 }
@@ -750,7 +758,7 @@ void TFT_eSPI::setRotation(uint8_t m)
 
 #endif
 
-  delayMicroseconds(10);
+  sleep_us(10);
 
   end_tft_write();
 
@@ -789,7 +797,7 @@ void TFT_eSPI::commandList (const uint8_t *addr)
     if (ms)
     {
       ms = pgm_read_byte(addr++);        // Read post-command delay time (ms)
-      delay( (ms==255 ? 500 : ms) );
+      sleep_ms( (ms==255 ? 500 : ms) );
     }
   }
 
@@ -1308,12 +1316,12 @@ void TFT_eSPI::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *d
 
 
 /***************************************************************************************
-** Function name:           pushImage - for FLASH (PROGMEM) stored images
+** Function name:           pushImage - for FLASH () stored images
 ** Description:             plot 16 bit image
 ***************************************************************************************/
 void TFT_eSPI::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, const uint16_t *data)
 {
-  // Requires 32 bit aligned access, so use PROGMEM 16 bit word functions
+  // Requires 32 bit aligned access, so use  16 bit word functions
   PI_CLIP;
 
   begin_tft_write();
@@ -1338,12 +1346,12 @@ void TFT_eSPI::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, const uint1
 }
 
 /***************************************************************************************
-** Function name:           pushImage - for FLASH (PROGMEM) stored images
+** Function name:           pushImage - for FLASH () stored images
 ** Description:             plot 16 bit image with 1 colour being transparent
 ***************************************************************************************/
 void TFT_eSPI::pushImage(int32_t x, int32_t y, int32_t w, int32_t h, const uint16_t *data, uint16_t transp)
 {
-  // Requires 32 bit aligned access, so use PROGMEM 16 bit word functions
+  // Requires 32 bit aligned access, so use  16 bit word functions
   PI_CLIP;
 
   begin_tft_write();

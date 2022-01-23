@@ -5,11 +5,14 @@
 // This is a generic driver for Arduino boards, it supports SPI interface displays
 // 8 bit parallel interface to TFT is not supported for generic processors
 
+#pragma once
+
 #ifndef _TFT_eSPI_RP2040H_
 #define _TFT_eSPI_RP2040H_
 
 // Required for both the official and community board packages
 #include "hardware/dma.h"
+#include "hardware/structs/sio.h"
 
 // Processor ID reported by getSetup()
 #define PROCESSOR_ID 0x2040
